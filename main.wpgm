@@ -1,16 +1,8 @@
 import wollok.game.*
 
-import pepita.*
+import racismo.*
 
-program PepitaGame {
-	game.title("Pepita")
-	game.height(10)
-	game.width(10)
-	game.cellSize(100)
-
-	game.addVisual(pepita)
-
-	keyboard.w().onPressDo({ pepita.fly(1) })
-
+program RacismoGame {
+	juegoDeRacismo.iniciar()
 	game.start()
 }
