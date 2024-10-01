@@ -1,8 +1,12 @@
 import wollok.game.*
 
-import racismo.*
+import example.*
 
-program RacismoGame {
-	juegoDeRacismo.iniciar()
-	game.start()
+
+program defenderBase {
+  	game.height(10)
+	game.width(10)
+    game.boardGround("assets/imagenDeFondo.png") //Agregar Imagen 
+	game.addVisualCharacter(personajedefensor)
+    game.start()
 }
