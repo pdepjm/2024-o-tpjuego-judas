@@ -4,9 +4,9 @@ import example.*
 
 
 program defenderBase {
-  	game.height(10)
-	game.width(10)
-    game.boardGround("assets/imagenDeFondo.png") //Agregar Imagen 
+  	game.height(8)
+	game.width(14)
+    game.boardGround("imagenDeFondo.png") //Agregar Imagen 
 	game.addVisualCharacter(personajedefensor)
     game.start()
 }
