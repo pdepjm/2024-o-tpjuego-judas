@@ -5,19 +5,20 @@ import example.*
 program defenderBase {
     game.height(9)
     game.width(16)
-    game.boardGround("imagenDeFondo.jpg") // Imagen del fondo
+    game.boardGround("Fondo2.jpg") 
     game.cellSize(50)
     game.title("Defender la Base")
 
-    // Generar enemigos cada 3 segundos
-    game.onTick(3000, "aparece enemigo", {
+    // Generar enemigos cada 4 segundos
+    game.onTick(4000, "aparece enemigo", {
         const enemigo1 = new Enemigo()
         enemigo1.aparecer()
     })
 
-    // Agregar el personaje militar al juego
-    game.addVisualCharacter(militar)
+	game.showAttributes(militar)
 
-    // Iniciar el juego
+
+	game.whenCollideDo(militar, { alguien => alguien.teTocoEnemigo() })
+    game.addVisualCharacter(militar)
     game.start()
 }

@@ -4,8 +4,12 @@ UTN - Facultad Regional Buenos Aires - Materia Paradigmas de Programación
 
 ## Equipo de desarrollo: 
 
-- completar...
-- completar...
+- Rodrigo Juan Manuel 
+- Uriel Julian Bove 
+- Sebastián Santiago Ayala Osorio
+- Cullen Salvador
+
+
  
 
 ## Capturas 
@@ -20,4 +24,5 @@ UTN - Facultad Regional Buenos Aires - Materia Paradigmas de Programación
 ## Controles:
 
 - `W` para...
+
 
