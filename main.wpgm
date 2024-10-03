@@ -7,6 +7,18 @@ program defenderBase {
   	game.height(9)
 	game.width(16)
     game.boardGround("imagenDeFondo.jpg") //Imagen del fondo
-	game.addVisualCharacter(personajedefensor)
+	game.cellSize(50)
+	game.title("Juego")
+
+/*	self.generarEnemigos()
+	
+	method generarEnemigos(){
+		game.onTick(1000,"aparece enemigo",{new Enemigo().aparecer()})
+	}
+*/
+	
+	game.onTick(8000, "movimiento", { enemigo1.moverseSolo() })
+	game.addVisualCharacter(militar)
+	game.addVisualCharacter(enemigo1)
     game.start()
 }
