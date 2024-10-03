@@ -2,11 +2,22 @@ import wollok.game.*
 
 import example.*
 
-
 program defenderBase {
-  	game.height(9)
-	game.width(16)
-    game.boardGround("imagenDeFondo.jpg") //Imagen del fondo
-	game.addVisualCharacter(personajedefensor)
+    game.height(9)
+    game.width(16)
+    game.boardGround("imagenDeFondo.jpg") // Imagen del fondo
+    game.cellSize(50)
+    game.title("Defender la Base")
+
+    // Generar enemigos cada 3 segundos
+    game.onTick(3000, "aparece enemigo", {
+        const enemigo1 = new Enemigo()
+        enemigo1.aparecer()
+    })
+
+    // Agregar el personaje militar al juego
+    game.addVisualCharacter(militar)
+
+    // Iniciar el juego
     game.start()
 }
