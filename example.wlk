@@ -3,9 +3,17 @@ import wollok.game.*
 object militar {
     var property image = "militarPrueba2.png"
     var property position = game.at(0, game.height() / 2) // posicionar al militar en el borde izquierdo, centrado verticalmente
-    var puntos = 0 // Puntos como número
-    var tiempoJugado = 0 // Tiempo jugado en segundos
-    var property puntosVisual = "Puntos: 0"
+    var vida = 3
+
+    method cuantaVida() = vida
+
+    method vida(nuevaVida){
+        vida = vida - nuevaVida
+    }  
+    
+    //var puntos = 0 // Puntos como número
+    //var tiempoJugado = 0 // Tiempo jugado en segundos
+    //var property puntosVisual = "Puntos: 0"
 
     // Método para disparar proyectiles
     method disparar() {
@@ -14,13 +22,16 @@ object militar {
         bala1.moverse()
         game.onCollideDo(bala1, { enemigo => bala1.enemigoColisionado(enemigo)})
     }
-
+/*
     // Método para actualizar el tiempo jugado y sumar puntos por segundo
     method actualizarTiempoYPuntos() {
         tiempoJugado += 1
         puntos += 1 // Se suma 1 punto por cada segundo
         puntosVisual = "Puntos: " + puntos.toString() // Actualizar el texto visible de los puntos
     }
+*/
+
+
 }
 
 class Enemigo {
@@ -33,7 +44,7 @@ class Enemigo {
         position = game.at(x, y)
         
         game.addVisual(self)
-        game.onTick(1500, "movimiento", { self.moverIzquierda() }) 
+        game.onTick(1000, "movimiento", { self.moverIzquierda() }) 
     }
 
     method moverIzquierda() {
@@ -43,20 +54,31 @@ class Enemigo {
         } else {
             game.removeVisual(self) // Eliminar al enemigo si llega al borde izquierdo
             game.say(militar, "Perdí cayó la base")
+            game.stop()
             // Fin del juego
         }
     }
 
     method teTocoEnemigo() {
-        game.say(militar, "¡Perdí!")
+        self.desaparecer()
+        if(militar.cuantaVida() > 1){
+            militar.vida(1)
+            game.say(militar, "¡Perdi una vida!")
+            }
+        else{
+            game.say(militar, "¡Fin Del Juego!")
+            game.stop()	          
+        }
         // Fin del juego
     }
-
+    method desaparecer(){
+        game.removeTickEvent("movimiento" )// Detener el movimiento del enemigo
+        game.removeVisual(self)
+    }
     // Método para destruir el enemigo y sumar puntos
      method morir() {
-        game.removeTickEvent("movimiento") // Detener el movimiento del enemigo
-        game.removeVisual(self)
-        const puntosPorMatar = 5
+        self.desaparecer()
+        // const puntosPorMatar = 5
     }
 }
 
@@ -69,7 +91,7 @@ class Proyectil {
 
     method moverse() {
         game.onTick(50, "moverProyectil", { self.moverDerecha() })
-    }
+    }  
 
     method moverDerecha() {
         const nuevaX = position.x() + 1
@@ -87,3 +109,19 @@ class Proyectil {
 }
 
 const enemigo1 = new Enemigo()
+
+
+object manzana{
+
+    var property image = "zombie2.png" 
+    var property position = game.at(0, 0) // Inicialmente en (0, 0), se ajustará a la hora de aparecer
+
+    method aparecer() {
+        const x = game.width() - 1 // Aparecer en el borde derecho
+        const y = 1.randomUpTo(game.height() - 2).truncate(0) // Posición aleatoria en el eje y
+        position = game.at(x, y)
+        
+        game.addVisual(self)
+    }
+
+}

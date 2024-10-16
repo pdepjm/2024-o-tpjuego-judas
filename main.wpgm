@@ -13,16 +13,24 @@ program defenderBase {
     game.onTick(4000, "aparece enemigo", {
         const enemigo1 = new Enemigo()
         enemigo1.aparecer()
-    })
+    }) 
 
+    game.onTick(10000, "aparece manzana roja", {
+        game.addVisual(manzana)
+    }) 
+/*
     // Actualizar el tiempo jugado y los puntos cada segundo
     game.onTick(1000, "actualizar tiempo y puntos", {
         militar.actualizarTiempoYPuntos()
         game.say(militar, militar.puntosVisual) // Mostrar puntos y tiempo en pantalla
     })
-
+*/
     // Evento para disparar con la tecla "space"
     keyboard.p().onPressDo { militar.disparar() }
+
+    game.whenCollideDo(militar, { alguien => alguien.teTocoEnemigo() })
+
+    keyboard.e().onPressDo { militar.cuantaVida() }
 
     game.addVisualCharacter(militar)
     game.start()
