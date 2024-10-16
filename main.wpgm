@@ -5,7 +5,7 @@ import example.*
 program defenderBase {
     game.height(9)
     game.width(16)
-    game.boardGround("Fondo2.jpg")
+    game.boardGround("pasto.jpg")
     game.cellSize(50)
     game.title("Defender la Base")
 
@@ -16,7 +16,11 @@ program defenderBase {
     }) 
 
     game.onTick(10000, "aparece manzana roja", {
-        game.addVisual(manzana)
+        game.addVisual(manzanaRoja)
+    }) 
+
+    game.onTick(15000, "aparece manzana dorada", {
+        game.addVisual(manzanaDorada)
     }) 
 /*
     // Actualizar el tiempo jugado y los puntos cada segundo
@@ -28,9 +32,11 @@ program defenderBase {
     // Evento para disparar con la tecla "space"
     keyboard.p().onPressDo { militar.disparar() }
 
-    game.whenCollideDo(militar, { alguien => alguien.teTocoEnemigo() })
+    game.whenCollideDo(militar, { enemigo1 => enemigo1.teTocoEnemigo() })
 
-    keyboard.e().onPressDo { militar.cuantaVida() }
+    game.whenCollideDo(militar, { manzanaRoja => manzanaRoja.teComioMilitar() })
+
+    keyboard.e().onPressDo { militar.dimeLasVidasActuales() }
 
     game.addVisualCharacter(militar)
     game.start()

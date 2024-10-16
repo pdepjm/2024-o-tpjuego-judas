@@ -1,16 +1,24 @@
 import wollok.game.*
 
 object militar {
-    var property image = "militarPrueba2.png"
+    var property image = "Soldado.png"
     var property position = game.at(0, game.height() / 2) // posicionar al militar en el borde izquierdo, centrado verticalmente
     var vida = 3
+    
 
     method cuantaVida() = vida
 
-    method vida(nuevaVida){
-        vida = vida - nuevaVida
+    method dimeLasVidasActuales(){
+        game.say(self, vida.toString())
+    }
+
+    method restarVida(nuevaVida){
+        vida -= nuevaVida
     }  
     
+    method sumarVida(nuevaVida){
+        vida += nuevaVida
+    } 
     //var puntos = 0 // Puntos como número
     //var tiempoJugado = 0 // Tiempo jugado en segundos
     //var property puntosVisual = "Puntos: 0"
@@ -20,8 +28,14 @@ object militar {
         const bala1 = new Proyectil()
 		game.addVisual(bala1)
         bala1.moverse()
-        game.onCollideDo(bala1, { enemigo => bala1.enemigoColisionado(enemigo)})
-    }
+        game.onCollideDo(bala1, { enemigo => bala1.enemigoColisionado(enemigo)}) 
+
+        //al salir del borde se elimina la bala
+         if(bala1.position() == game.width()) { 
+				game.removeVisual(bala1) 
+				game.removeTickEvent("moverProyectil") 
+        }
+       
 /*
     // Método para actualizar el tiempo jugado y sumar puntos por segundo
     method actualizarTiempoYPuntos() {
@@ -31,9 +45,8 @@ object militar {
     }
 */
 
-
+    }
 }
-
 class Enemigo {
     var property image = "zombie2.png" 
     var property position = game.at(0, 0) // Inicialmente en (0, 0), se ajustará a la hora de aparecer
@@ -61,14 +74,19 @@ class Enemigo {
 
     method teTocoEnemigo() {
         self.desaparecer()
-        if(militar.cuantaVida() > 1){
-            militar.vida(1)
-            game.say(militar, "¡Perdi una vida!")
+        if(manzanaDorada.inmunidadActivada()){
+            game.say(militar, "¡SOY INMUNE!")
+        } else{
+                if(militar.cuantaVida() > 1){
+                militar.restarVida(1)
+                game.say(militar, "¡Perdi una vida!")
+                }
+            else {
+                game.say(militar, "¡Fin Del Juego!")
+                          
             }
-        else{
-            game.say(militar, "¡Fin Del Juego!")
-            game.stop()	          
-        }
+        } 
+        
         // Fin del juego
     }
     method desaparecer(){
@@ -104,6 +122,7 @@ class Proyectil {
 
     method enemigoColisionado(enemigo) {
         game.removeVisual(self) // Eliminar proyectil
+        game.removeTickEvent("moverProyectil") // Detener el movimiento del proyectil
         enemigo.morir() // Destruir al enemigo
     }
 }
@@ -111,17 +130,57 @@ class Proyectil {
 const enemigo1 = new Enemigo()
 
 
-object manzana{
+object manzanaRoja{
 
-    var property image = "zombie2.png" 
+    var property image = "Manzana.png" 
     var property position = game.at(0, 0) // Inicialmente en (0, 0), se ajustará a la hora de aparecer
 
     method aparecer() {
-        const x = game.width() - 1 // Aparecer en el borde derecho
+        const x = 1.randomUpTo(game.width() - 2).truncate(0) // Aparecer en el borde derecho
         const y = 1.randomUpTo(game.height() - 2).truncate(0) // Posición aleatoria en el eje y
         position = game.at(x, y)
         
         game.addVisual(self)
     }
 
+
+    method teComioMilitar(){
+        self.habilidad()
+        game.removeVisual(self)
+    }
+
+    method habilidad() {
+      militar.sumarVida(1)
+    }
 }
+
+object manzanaDorada{
+
+    var property image = "Manzana_Dorada.png" 
+    var property position = game.at(0, 0) // Inicialmente en (0, 0), se ajustará a la hora de aparecer
+    var property inmunidadActivada = false
+    method aparecer() {
+        const x = 1.randomUpTo(game.width() - 2).truncate(0) // Aparecer en el borde derecho
+        const y = 1.randomUpTo(game.height() - 2).truncate(0) // Posición aleatoria en el eje y
+        position = game.at(x, y)
+        
+        game.addVisual(self)
+    }
+
+
+    method teComioMilitar(){
+        self.habilidad()
+        game.removeVisual(self)
+    }
+
+    method habilidad() {
+        inmunidadActivada = true
+
+      game.onTick(5000, "deshabilitar inmunidad",{ self.inmunidad() })
+    }
+
+    method inmunidad(){
+        inmunidadActivada = false
+    }
+}
+
