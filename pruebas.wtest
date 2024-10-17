@@ -1,0 +1,20 @@
+import example.*
+
+test "vida del militar inicial en 3" {
+    assert.equals(3, militar.cuantaVida())
+}
+
+test "La vida es 4 cuando el militar toca una manzana roja" {
+    const manzanaRoja1 = new ManzanaRoja()
+    manzanaRoja1.teComioMilitar() 
+    assert.equals(4, militar.cuantaVida())
+    
+}
+
+test "Manzana dorada hace inmune a militar" {
+    const manzanaDorada1 = new ManzanaDorada()
+    manzanaDorada1.teComioMilitar()
+    const enemigo1 = new Enemigo()
+    enemigo1.teTocoEnemigo() 
+    assert.that(manzanaDorada1.inmunidadActivada())
+}

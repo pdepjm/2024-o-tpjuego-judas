@@ -9,7 +9,8 @@ UTN - Facultad Regional Buenos Aires - Materia Paradigmas de Programación
 - Sebastián Santiago Ayala Osorio
 - Cullen Salvador
 
-
+## Explicaciones Teóricas: 
+Aplicamos clases para manzana roja ,manzana dorada ,proyectil y enemigo para instanciar objetos  en cantidades variadas .Utilizamos polimorfismo para los dos tipos de manzanas en el metodo "habilidad" ; Delegamos en varios objetos ,en primera instancia delegamos el metodo de "habilidadActivada" para manzana dorada y no para el militar .También delegamos al momento de hacer el método "disparar" dejando este en el militar ,además tanto el movimiento como la colisión de la bala lo delegamos en aquel objeto de modo que este mejor organizada la estructura del código .
  
 
 ## Capturas 

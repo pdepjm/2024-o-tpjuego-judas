@@ -1,10 +1,15 @@
 import wollok.game.*
 
 object militar {
-    var property image = "Soldado.png"
+    var image = "Soldado.png"
     var property position = game.at(0, game.height() / 2) // posicionar al militar en el borde izquierdo, centrado verticalmente
     var vida = 3
     
+    method image() = image
+
+    method image(nuevaImagen) {
+        image = nuevaImagen
+    }
 
     method cuantaVida() = vida
 
@@ -28,10 +33,10 @@ object militar {
         const bala1 = new Proyectil()
 		game.addVisual(bala1)
         bala1.moverse()
-        game.onCollideDo(bala1, { enemigo => bala1.enemigoColisionado(enemigo)}) 
+        game.onCollideDo(bala1, { enemigo1 => bala1.enemigoColisionado(enemigo1)}) 
 
         //al salir del borde se elimina la bala
-         if(bala1.position() == game.width()) { 
+         if(bala1.position().x() == game.width()) { 
 				game.removeVisual(bala1) 
 				game.removeTickEvent("moverProyectil") 
         }
@@ -51,7 +56,7 @@ class Enemigo {
     var property image = "zombie2.png" 
     var property position = game.at(0, 0) // Inicialmente en (0, 0), se ajustará a la hora de aparecer
 
-    method aparecer() {
+    method generarEnemigo() {
         const x = game.width() - 1 // Aparecer en el borde derecho
         const y = 1.randomUpTo(game.height() - 2).truncate(0) // Posición aleatoria en el eje y
         position = game.at(x, y)
@@ -67,14 +72,14 @@ class Enemigo {
         } else {
             game.removeVisual(self) // Eliminar al enemigo si llega al borde izquierdo
             game.say(militar, "Perdí cayó la base")
-            game.stop()
+            
             // Fin del juego
         }
     }
 
     method teTocoEnemigo() {
-        self.desaparecer()
-        if(manzanaDorada.inmunidadActivada()){
+        self.morir()
+        if(manzanaDorada1.inmunidadActivada()){
             game.say(militar, "¡SOY INMUNE!")
         } else{
                 if(militar.cuantaVida() > 1){
@@ -83,28 +88,27 @@ class Enemigo {
                 }
             else {
                 game.say(militar, "¡Fin Del Juego!")
-                          
+                // Fin del juego          
             }
         } 
         
-        // Fin del juego
-    }
-    method desaparecer(){
-        game.removeTickEvent("movimiento" )// Detener el movimiento del enemigo
-        game.removeVisual(self)
+        
     }
     // Método para destruir el enemigo y sumar puntos
      method morir() {
-        self.desaparecer()
+        game.removeTickEvent("movimiento" )// Detener el movimiento del enemigo
+        game.removeVisual(self)
         // const puntosPorMatar = 5
+
     }
+
 }
 
 class Proyectil {
     //var property position = self.posicionInicial()
 	//method posicionInicial() = militar.position().right(1)
 
-    var property image = "bala_blanca.png" 
+    var property image = "Bala_Loca.png" 
     var property position = militar.position() // La bala proviene del militar
 
     method moverse() {
@@ -120,24 +124,28 @@ class Proyectil {
         }
     }
 
-    method enemigoColisionado(enemigo) {
+    method enemigoColisionado(enemigo1) {
         game.removeVisual(self) // Eliminar proyectil
         game.removeTickEvent("moverProyectil") // Detener el movimiento del proyectil
-        enemigo.morir() // Destruir al enemigo
+        enemigo1.morir() // Destruir al enemigo
     }
 }
 
 const enemigo1 = new Enemigo()
 
+const manzanaRoja1 = new ManzanaRoja()
 
-object manzanaRoja{
+const manzanaDorada1 = new ManzanaDorada()
+class ManzanaRoja{
 
     var property image = "Manzana.png" 
     var property position = game.at(0, 0) // Inicialmente en (0, 0), se ajustará a la hora de aparecer
 
-    method aparecer() {
-        const x = 1.randomUpTo(game.width() - 2).truncate(0) // Aparecer en el borde derecho
-        const y = 1.randomUpTo(game.height() - 2).truncate(0) // Posición aleatoria en el eje y
+    method generarManzanaRoja() {
+
+        //posicion aleatoria
+        const x = 0.randomUpTo(game.width()) // Aparecer en el borde derecho
+        const y = 0.randomUpTo(game.height()) // Posición aleatoria en el eje y
         position = game.at(x, y)
         
         game.addVisual(self)
@@ -154,19 +162,20 @@ object manzanaRoja{
     }
 }
 
-object manzanaDorada{
+class ManzanaDorada{
 
     var property image = "Manzana_Dorada.png" 
     var property position = game.at(0, 0) // Inicialmente en (0, 0), se ajustará a la hora de aparecer
     var property inmunidadActivada = false
-    method aparecer() {
-        const x = 1.randomUpTo(game.width() - 2).truncate(0) // Aparecer en el borde derecho
-        const y = 1.randomUpTo(game.height() - 2).truncate(0) // Posición aleatoria en el eje y
+    
+    method generarManzanaDorada() {
+
+        const x = 0.randomUpTo(game.width()) // Aparecer en el borde derecho
+        const y = 0.randomUpTo(game.height()) // Posición aleatoria en el eje y
         position = game.at(x, y)
         
         game.addVisual(self)
     }
-
 
     method teComioMilitar(){
         self.habilidad()
@@ -175,8 +184,10 @@ object manzanaDorada{
 
     method habilidad() {
         inmunidadActivada = true
-
-      game.onTick(5000, "deshabilitar inmunidad",{ self.inmunidad() })
+        militar.image("Soldado_Dorado.png") 
+        game.onTick(5000, "deshabilitar inmunidad",{ self.inmunidad() })
+        game.schedule(5000, {militar.image("Soldado.png")})
+        
     }
 
     method inmunidad(){

@@ -5,22 +5,24 @@ import example.*
 program defenderBase {
     game.height(9)
     game.width(16)
-    game.boardGround("pasto.jpg")
+    game.boardGround("cortado2.png")
     game.cellSize(50)
     game.title("Defender la Base")
 
     // Generar enemigos cada 4 segundos
     game.onTick(4000, "aparece enemigo", {
         const enemigo1 = new Enemigo()
-        enemigo1.aparecer()
+        enemigo1.generarEnemigo()
     }) 
 
     game.onTick(10000, "aparece manzana roja", {
-        game.addVisual(manzanaRoja)
+        const manzanaRoja1 = new ManzanaRoja()
+        manzanaRoja1.generarManzanaRoja()
     }) 
 
     game.onTick(15000, "aparece manzana dorada", {
-        game.addVisual(manzanaDorada)
+        const manzanaDorada1 = new ManzanaDorada()
+        manzanaDorada1.generarManzanaDorada()
     }) 
 /*
     // Actualizar el tiempo jugado y los puntos cada segundo
@@ -29,12 +31,14 @@ program defenderBase {
         game.say(militar, militar.puntosVisual) // Mostrar puntos y tiempo en pantalla
     })
 */
-    // Evento para disparar con la tecla "space"
+    // Evento para disparar con la tecla "p"
     keyboard.p().onPressDo { militar.disparar() }
-
+    
     game.whenCollideDo(militar, { enemigo1 => enemigo1.teTocoEnemigo() })
 
     game.whenCollideDo(militar, { manzanaRoja => manzanaRoja.teComioMilitar() })
+
+    game.whenCollideDo(militar, { manzanaDorada => manzanaDorada.teComioMilitar() })
 
     keyboard.e().onPressDo { militar.dimeLasVidasActuales() }
 
