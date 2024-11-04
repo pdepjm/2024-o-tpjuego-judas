@@ -15,14 +15,20 @@ program defenderBase {
         enemigo1.generarEnemigo()
     }) 
 
-    game.onTick(10000, "aparece manzana roja", {
+    game.onTick(15000, "aparece manzana roja", {
         const manzanaRoja1 = new ManzanaRoja()
-        manzanaRoja1.generarManzanaRoja()
+        manzanaRoja1.generarManzana()
     }) 
 
-    game.onTick(15000, "aparece manzana dorada", {
+    game.onTick(20000, "aparece manzana dorada", {
         const manzanaDorada1 = new ManzanaDorada()
-        manzanaDorada1.generarManzanaDorada()
+        manzanaDorada1.generarManzana()
+    }) 
+
+    game.onTick(25000, "aparece manzana super", {
+        const superManzana1 = new SuperManzana()
+        superManzana1.generarManzana()
+        superManzana1.image("superManzana.png")
     }) 
 /*
     // Actualizar el tiempo jugado y los puntos cada segundo
@@ -33,14 +39,28 @@ program defenderBase {
 */
     // Evento para disparar con la tecla "p"
     keyboard.p().onPressDo { militar.disparar() }
-    
-    game.whenCollideDo(militar, { enemigo1 => enemigo1.teTocoEnemigo() })
+    /*
+    if(militar.frenado()) 
+    {//Frenan disparo : 
+    game.vel
+    keyboard.p().onPressDo { militar.disparar() }
 
-    game.whenCollideDo(militar, { manzanaRoja => manzanaRoja.teComioMilitar() })
+    //Desactivar Movimiento  : 
 
-    game.whenCollideDo(militar, { manzanaDorada => manzanaDorada.teComioMilitar() })
+    keyboard.a().onPressDo { militar.caminarArriba() }
+    keyboard.s().onPressDo { militar.caminarIzquierda() }
+    keyboard.d().onPressDo { militar.caminarDerecha() }
+    keyboard.w().onPressDo { militar.caminarAbajo() }
+    }
+    */
+
+    game.whenCollideDo(militar, { colisionado => colisionado.chocarConMilitar() })
+
+    //game.onCollideDo(bala1, { colisionado => colisionado.chocarConBala()})
 
     keyboard.e().onPressDo { militar.dimeLasVidasActuales() }
+
+    keyboard.f().onPressDo { militar.arreglarBase() }
 
     game.addVisualCharacter(militar)
     game.start()
