@@ -28,7 +28,7 @@ program defenderBase {
     game.onTick(25000, "aparece manzana super", {
         const superManzana1 = new SuperManzana()
         superManzana1.generarManzana()
-        superManzana1.image("superManzana.png")
+        superManzana1.image("SuperManzana.png")
     }) 
 /*
     // Actualizar el tiempo jugado y los puntos cada segundo
