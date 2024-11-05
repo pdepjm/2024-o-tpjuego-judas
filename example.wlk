@@ -5,6 +5,45 @@ object militar {
     var property position = game.at(0, game.height() / 2) // posicionar al militar en el borde izquierdo, centrado verticalmente
     var vida = 3
     var inmune = false
+    var puedeMoverse = true
+    
+    //movimientos
+
+    method moverseHaciaIzquierda(){
+        if(puedeMoverse){
+		self.position(position.left(1))
+        }else{
+            game.say(self, "No puedo moverme")
+        }
+	}
+	
+	method moverseHaciaDerecha(){
+		if(puedeMoverse){
+		self.position(position.right(1))
+        }else{
+            game.say(self, "No puedo moverme")
+        }
+	}
+
+    method moverseHaciaArriba(){
+		if(puedeMoverse){
+		self.position(position.up(1))
+        }else{
+            game.say(self, "No puedo moverme")
+        }
+	}
+
+    method moverseHaciaAbajo(){
+		if(puedeMoverse){
+		self.position(position.down(1))
+        }else{
+            game.say(self, "No puedo moverme")
+        }
+	}
+
+    method desactivarMovimiento() {
+        puedeMoverse = false
+    }
 
     //method image() = image
 
@@ -24,9 +63,13 @@ object militar {
     method llenarVida(){vida = 3}
     method cuantaVida() = vida
 
-    method dimeLasVidasActuales(){
+    method dimeLaVidaActual(){
         
-        game.say(self, "Vida Militar:" + vida.toString())
+        game.say(self, "Vida Militar:" + vida.toString()) 
+    }
+
+    method dimeVidaDeLaBase(){
+
         game.say(self, "Vida Base:" + base.vida.toString()) 
     }
 
@@ -35,6 +78,7 @@ object militar {
 
         if(vida < 1){
             game.say(self, "¡Fin Del Juego!")
+            interfaz.detenerJuego()
             // PONER FIN DEL JUEGO
         }
         else{
@@ -96,7 +140,12 @@ object militar {
     method chocarConBala(bala1){ }
     
     method arreglarBase(){
-        game.onTick(5000, "POnerkla DURA",{ self.desactivarInmunidad() })
+        image = "bob.png"
+        game.say(self, "Arreglando la base")
+        if(inmune)self.desactivarMovimiento()
+        game.onTick(4000, "No Moverse",{ puedeMoverse = true })
+        game.onTick(4000, "volver",{ image = "soldado.png"})
+        //game.onTick(4000, "POnerkla DURA",{ self.desactivarInmunidad() })
         base.vida(2)
     }
     
@@ -243,6 +292,7 @@ class ManzanaDorada inherits Manzana{
     }*/
     override method habilidad() {
         militar.activarInmunidad()
+        
     }
     /*
     override method habilidad() {
@@ -276,6 +326,7 @@ object base {
 
         if(vida < 1){
             game.say(militar, "Perdí cayó la base")
+            interfaz.detenerJuego()
             // PONER FIN DEL JUEGO
         }
         else{
@@ -284,3 +335,89 @@ object base {
     }  
 }
 
+////////////////////////////////////////////////////////////
+//////////////////////   GAME OVER  ////////////////////////
+////////////////////////////////////////////////////////////
+object gameOver{
+	var property position = game.at(0,0)
+	method quitar(){
+		game.removeVisual(self)
+	}
+	method image() = "gameOver.jpg"
+	method colocar(){
+		game.addVisual(self)
+	}
+}
+
+object interfaz {
+    method empezarJuego() {
+        
+        game.addVisualCharacter(militar)
+    
+        self.desbloquearTeclas()
+        self.colisiones()
+        
+        // Generar enemigos cada 4 segundos
+        game.onTick(4000, "aparece enemigo", {
+            const enemigo1 = new Enemigo()
+            enemigo1.generarEnemigo()
+        }) 
+
+        game.onTick(15000, "aparece manzana roja", {
+            const manzanaRoja1 = new ManzanaRoja()
+            manzanaRoja1.generarManzana()
+        }) 
+
+        game.onTick(20000, "aparece manzana dorada", {
+            const manzanaDorada1 = new ManzanaDorada()
+            manzanaDorada1.generarManzana()
+        }) 
+
+        game.onTick(25000, "aparece manzana super", {
+            const superManzana1 = new SuperManzana()
+            superManzana1.generarManzana()
+            superManzana1.image("SuperManzana.png")
+        }) 
+    }
+
+    method desbloquearTeclas() {
+        keyboard.e().onPressDo { militar.dimeLaVidaActual() }
+        keyboard.b().onPressDo { militar.dimeVidaDeLaBase() }
+        keyboard.f().onPressDo { militar.arreglarBase() }
+        keyboard.space().onPressDo { self.detenerJuego() }
+        keyboard.r().onPressDo { self.restart() }
+        keyboard.p().onPressDo { militar.disparar() }
+
+        //flechas de movimiento
+        keyboard.a().onPressDo( { militar.moverseHaciaIzquierda() } )
+		keyboard.d().onPressDo( { militar.moverseHaciaDerecha() } )
+        keyboard.w().onPressDo( { militar.moverseHaciaArriba() } )
+        keyboard.s().onPressDo( { militar.moverseHaciaAbajo() } )
+    }
+
+    method colisiones() {
+        game.whenCollideDo(militar, { colisionado => colisionado.chocarConMilitar() })
+    }
+
+    method restart() {
+        self.empezarJuego()
+
+        gameOver.quitar()
+    }
+    
+    method detenerJuego() {
+        //detener todos los eventos
+        game.removeTickEvent("aparece enemigo")
+        game.removeTickEvent("aparece manzana roja")
+        game.removeTickEvent("aparece manzana dorada")
+        game.removeTickEvent("aparece manzana super")
+        game.removeTickEvent("actualizar tiempo y puntos")
+        game.removeTickEvent("moverProyectil") 
+    
+        //borrar militar
+        game.removeVisual(militar)
+        //borrar zombies
+
+        gameOver.colocar()
+    }
+}

@@ -9,27 +9,7 @@ program defenderBase {
     game.cellSize(50)
     game.title("Defender la Base")
 
-    // Generar enemigos cada 4 segundos
-    game.onTick(4000, "aparece enemigo", {
-        const enemigo1 = new Enemigo()
-        enemigo1.generarEnemigo()
-    }) 
-
-    game.onTick(15000, "aparece manzana roja", {
-        const manzanaRoja1 = new ManzanaRoja()
-        manzanaRoja1.generarManzana()
-    }) 
-
-    game.onTick(20000, "aparece manzana dorada", {
-        const manzanaDorada1 = new ManzanaDorada()
-        manzanaDorada1.generarManzana()
-    }) 
-
-    game.onTick(25000, "aparece manzana super", {
-        const superManzana1 = new SuperManzana()
-        superManzana1.generarManzana()
-        superManzana1.image("SuperManzana.png")
-    }) 
+    interfaz.empezarJuego()
 /*
     // Actualizar el tiempo jugado y los puntos cada segundo
     game.onTick(1000, "actualizar tiempo y puntos", {
@@ -38,7 +18,7 @@ program defenderBase {
     })
 */
     // Evento para disparar con la tecla "p"
-    keyboard.p().onPressDo { militar.disparar() }
+
     /*
     if(militar.frenado()) 
     {//Frenan disparo : 
@@ -54,14 +34,11 @@ program defenderBase {
     }
     */
 
-    game.whenCollideDo(militar, { colisionado => colisionado.chocarConMilitar() })
-
     //game.onCollideDo(bala1, { colisionado => colisionado.chocarConBala()})
 
-    keyboard.e().onPressDo { militar.dimeLasVidasActuales() }
+    // TECLAS
 
-    keyboard.f().onPressDo { militar.arreglarBase() }
 
-    game.addVisualCharacter(militar)
+
     game.start()
 }
