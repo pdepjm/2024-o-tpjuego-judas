@@ -65,12 +65,11 @@ object militar {
 
     method dimeLaVidaActual(){
         
-        game.say(self, "Vida Militar:" + vida.toString()) 
+        game.say(self, "Vida Militar: " + vida.toString()) 
     }
 
     method dimeVidaDeLaBase(){
-
-        game.say(self, "Vida Base:" + base.vida.toString()) 
+        game.say(self, "Vida Base: " + base.vida) 
     }
 
     method restarVida(nuevaVida){
@@ -142,9 +141,16 @@ object militar {
     method arreglarBase(){
         image = "bob.png"
         game.say(self, "Arreglando la base")
-        if(inmune)self.desactivarMovimiento()
-        game.onTick(4000, "No Moverse",{ puedeMoverse = true })
-        game.onTick(4000, "volver",{ image = "soldado.png"})
+        self.desactivarMovimiento()
+        if(inmune){
+            game.onTick(2000, "No Moverse",{ puedeMoverse = true })
+            game.onTick(2000, "volver",{ image = "soldado.png"})
+            
+        }
+        else{
+            game.onTick(4000, "No Moverse",{ puedeMoverse = true })
+            game.onTick(4000, "volver",{ image = "soldado.png"})
+        }
         //game.onTick(4000, "POnerkla DURA",{ self.desactivarInmunidad() })
         base.vida(2)
     }
@@ -322,15 +328,13 @@ object base {
     var property vida = 2
     
     method restarVida(nuevaVida){
-        vida -= nuevaVida
-
-        if(vida < 1){
+        if(vida>1){
+            vida -= nuevaVida
+            game.say(militar, "La base perdió una vida!")}
+        else{
             game.say(militar, "Perdí cayó la base")
             interfaz.detenerJuego()
             // PONER FIN DEL JUEGO
-        }
-        else{
-            game.say(self, "La base perdió una vida!")
         }
     }  
 }
@@ -376,7 +380,7 @@ object interfaz {
         game.onTick(25000, "aparece manzana super", {
             const superManzana1 = new SuperManzana()
             superManzana1.generarManzana()
-            superManzana1.image("SuperManzana.png")
+            superManzana1.image("superManzana.png")
         }) 
     }
 
