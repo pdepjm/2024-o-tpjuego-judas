@@ -1,16 +1,44 @@
 import wollok.game.*
 
-import pepita.*
+import example.*
 
-program PepitaGame {
-	game.title("Pepita")
-	game.height(10)
-	game.width(10)
-	game.cellSize(100)
+program defenderBase {
+    game.height(9)
+    game.width(16)
+    game.boardGround("cortado2.png")
+    game.cellSize(50)
+    game.title("Defender la Base")
 
-	game.addVisual(pepita)
+    interfaz.empezarJuego()
+/*
+    // Actualizar el tiempo jugado y los puntos cada segundo
+    game.onTick(1000, "actualizar tiempo y puntos", {
+        militar.actualizarTiempoYPuntos()
+        game.say(militar, militar.puntosVisual) // Mostrar puntos y tiempo en pantalla
+    })
+*/
+    // Evento para disparar con la tecla "p"
 
-	keyboard.w().onPressDo({ pepita.fly(1) })
+    /*
+    if(militar.frenado()) 
+    {//Frenan disparo : 
+    game.vel
+    keyboard.p().onPressDo { militar.disparar() }
 
-	game.start()
+    //Desactivar Movimiento  : 
+
+    keyboard.a().onPressDo { militar.caminarArriba() }
+    keyboard.s().onPressDo { militar.caminarIzquierda() }
+    keyboard.d().onPressDo { militar.caminarDerecha() }
+    keyboard.w().onPressDo { militar.caminarAbajo() }
+    }
+    */
+
+    //game.onCollideDo(bala1, { colisionado => colisionado.chocarConBala()})
+
+    // TECLAS
+
+
+
+    game.start()
 }
