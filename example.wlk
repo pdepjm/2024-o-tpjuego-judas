@@ -1,22 +1,105 @@
 import wollok.game.*
 
+object arriba{
+    method mover(){
+     militar.position(militar.posicionArriba())
+    }
+}
+object abajo{
+    method mover(){
+     militar.position(militar.posicionAbajo())
+    }
+}
+object derecha{
+    method mover(){
+     militar.position(militar.posicionDerecha())
+    }
+}
+object izquierda{
+    method mover(){
+     militar.position(militar.posicionIzquierda())
+    }
+}
+
+object normal{
+    method moverHacia(direccion)
+    {
+     direccion.mover()
+    }
+
+/*
+    method moverHaciaDerecha(){
+        militar.position(militar.posicionDerecha())
+    }
+
+     method moverHaciaArriba(){
+        militar.position(militar.posicionArriba())
+    }
+
+    method moverHaciaAbajo(){
+        militar.position(militar.posicionAbajo())
+    }*/
+
+    method image(inmune) {
+        if(inmune){
+            return "Soldado_Dorado.png"
+        }
+        else{
+            return "Soldado.png"
+        }
+    }
+}
+
+object estaArreglando{
+    method moverHacia(direcccion){
+        game.say(self, "No puedo moverme")
+    }
+    method image(inmune) {
+        if(inmune){
+            return "Soldado_Dorado.png"
+        }
+        else{
+            return "bob.png"
+        }
+    }
+}
+
 object militar {
-    var image = "Soldado.png"
+    method image() = estado.image(inmune)
     var property position = game.at(0, game.height() / 2) // posicionar al militar en el borde izquierdo, centrado verticalmente
     var vida = 3
     var inmune = false
-    var puedeMoverse = true
+    var estado = normal
     
+
+    method posicionIzquierda() = position.left(1)
+    method posicionDerecha() = position.right(1)
+    method posicionArriba() = position.up(1)
+    method posicionAbajo() = position.down(1)
+
+
     //movimientos
 
+    method moverseHacia(direccion) {
+    estado.moverHacia(direccion)
+    }
+/*
     method moverseHaciaIzquierda(){
+        estado.moverHaciaIzquierda()
+
         if(puedeMoverse){
 		self.position(position.left(1))
         }else{
             game.say(self, "No puedo moverme")
-        }
-	}
+        } 
+	}*/
 	
+
+    method arreglar(estaArreglando){
+
+    }
+
+/*
 	method moverseHaciaDerecha(){
 		if(puedeMoverse){
 		self.position(position.right(1))
@@ -40,10 +123,8 @@ object militar {
             game.say(self, "No puedo moverme")
         }
 	}
+*/
 
-    method desactivarMovimiento() {
-        puedeMoverse = false
-    }
 
     //method image() = image
 
@@ -52,14 +133,9 @@ object militar {
     }
     */
     
-    method image(){
-        if(inmune){
-            return "Soldado_Dorado.png"
-        }
-        else{
-            return "Soldado.png"
-        }
-    }
+
+
+    
     method llenarVida(){vida = 3}
     method cuantaVida() = vida
 
@@ -86,8 +162,9 @@ object militar {
     }  
     
     method sumarVida(nuevaVida){
-        if (vida >= 3){} else {vida += nuevaVida} //Max vidas es 3
-    } 
+                if (vida >= 3){} else {vida += nuevaVida} //Max vidas es 3
+
+        } 
     //var puntos = 0 // Puntos como número
     //var tiempoJugado = 0 // Tiempo jugado en segundos
     //var property puntosVisual = "Puntos: 0"
@@ -139,17 +216,16 @@ object militar {
     method chocarConBala(bala1){ }
     
     method arreglarBase(){
-        image = "bob.png"
         game.say(self, "Arreglando la base")
-        self.desactivarMovimiento()
+        estado=estaArreglando
         if(inmune){
-            game.onTick(2000, "No Moverse",{ puedeMoverse = true })
-            game.onTick(2000, "volver",{ image = "soldado.png"})
+            game.onTick(2000, "No Moverse",{ estado = normal })
+           // game.onTick(2000, "volver",{ image = "soldado.png"})
             
         }
         else{
-            game.onTick(4000, "No Moverse",{ puedeMoverse = true })
-            game.onTick(4000, "volver",{ image = "soldado.png"})
+            game.onTick(4000, "No Moverse",{ estado = normal })
+          //  game.onTick(4000, "volver",{ image = "soldado.png"})
         }
         //game.onTick(4000, "POnerkla DURA",{ self.desactivarInmunidad() })
         base.vida(2)
@@ -160,14 +236,15 @@ object militar {
 class Enemigo {
     var property image = "zombie2.png" 
     var property position = game.at(0, 0) // Inicialmente en (0, 0), se ajustará a la hora de aparecer
-
+    var nombre
     method generarEnemigo() {
         const x = game.width() - 1 // Aparecer en el borde derecho
         const y = 1.randomUpTo(game.height() - 2).truncate(0) // Posición aleatoria en el eje y
         position = game.at(x, y)
         
         game.addVisual(self)
-        game.onTick(1000, "movimiento", { self.moverIzquierda() }) 
+        nombre="movimiento"+(1.randomUpTo(10000)).toString()
+        game.onTick(1000, nombre, { self.moverIzquierda() }) 
     }
 
     /*method movimiento(){
@@ -179,7 +256,7 @@ class Enemigo {
         if (nuevaX >= 0) { // Mientras no salga del borde izquierdo
             position = game.at(nuevaX, position.y())
         } else {
-            game.removeVisual(self) // Eliminar al enemigo si llega al borde izquierdo
+            self.morir()// Eliminar al enemigo si llega al borde izquierdo
             base.restarVida(1)
         }
     }
@@ -199,7 +276,7 @@ class Enemigo {
 
     // Método para destruir el enemigo y sumar puntos
      method morir() {
-        game.removeTickEvent("movimiento" )// Detener el movimiento del enemigo
+        game.removeTickEvent(nombre)// Detener el movimiento del enemigo
         game.removeVisual(self)
         // const puntosPorMatar = 5
 
@@ -285,10 +362,11 @@ class ManzanaRoja inherits Manzana{
 }
 
 class ManzanaDorada inherits Manzana{
-    var property image = "Manzana_Dorada.png" 
     
     var property inmunidadActivada = false
     
+    method image() = "Manzana_Dorada.png" 
+
     
     /*override method habilidad() {
         inmunidadActivada = true
@@ -322,10 +400,12 @@ class SuperManzana inherits ManzanaDorada {
         super()
         militar.llenarVida()
     }
+
+    override method image() = "superManzana.png"
 }
 
 object base {
-    var property vida = 2
+    var property vida = 3
     
     method restarVida(nuevaVida){
         if(vida>1){
@@ -356,14 +436,14 @@ object gameOver{
 object interfaz {
     method empezarJuego() {
         
-        game.addVisualCharacter(militar)
+        game.addVisual(militar)
     
         self.desbloquearTeclas()
         self.colisiones()
         
         // Generar enemigos cada 4 segundos
-        game.onTick(4000, "aparece enemigo", {
-            const enemigo1 = new Enemigo()
+        game.onTick(4000, "aparece enemigo" + (1.randomUpTo(10000)).toString(), {
+            const enemigo1 = new Enemigo(nombre="")
             enemigo1.generarEnemigo()
         }) 
 
@@ -380,7 +460,6 @@ object interfaz {
         game.onTick(25000, "aparece manzana super", {
             const superManzana1 = new SuperManzana()
             superManzana1.generarManzana()
-            superManzana1.image("superManzana.png")
         }) 
     }
 
@@ -393,10 +472,10 @@ object interfaz {
         keyboard.p().onPressDo { militar.disparar() }
 
         //flechas de movimiento
-        keyboard.a().onPressDo( { militar.moverseHaciaIzquierda() } )
-		keyboard.d().onPressDo( { militar.moverseHaciaDerecha() } )
-        keyboard.w().onPressDo( { militar.moverseHaciaArriba() } )
-        keyboard.s().onPressDo( { militar.moverseHaciaAbajo() } )
+        keyboard.a().onPressDo( { militar.moverseHacia(izquierda) } )
+		keyboard.d().onPressDo( { militar.moverseHacia(derecha) } )
+        keyboard.w().onPressDo( { militar.moverseHacia(arriba) } )
+        keyboard.s().onPressDo( { militar.moverseHacia(abajo) } )
     }
 
     method colisiones() {
