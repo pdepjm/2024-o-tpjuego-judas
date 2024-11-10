@@ -367,8 +367,13 @@ class SuperManzana inherits ManzanaDorada {
 }
 
 object base {
-    var property vida = 3
-    
+    var property vida = 2
+    var property image = "foto vida"
+    //method image() = "image"
+    /*var position = game.at(x, y)
+    const x = game.width() - 1 // Aparecer en el borde derecho
+    const y = game.height() - 1 // Posición aleatoria en el eje y
+    */
     method restarVida(nuevaVida){
         if(vida>1){
             vida -= nuevaVida
@@ -399,7 +404,7 @@ object interfaz {
     method empezarJuego() {
         
         game.addVisual(militar)
-    
+        
         self.desbloquearTeclas()
         self.colisiones()
         
