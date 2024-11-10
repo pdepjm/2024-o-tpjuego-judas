@@ -68,7 +68,7 @@ object militar {
     method image() = estado.image(inmune)
     var property position = game.at(0, game.height() / 2) // posicionar al militar en el borde izquierdo, centrado verticalmente
     var vida = 3
-    var inmune = false
+    var property inmune = false
     var estado = normal
     
 
@@ -83,59 +83,12 @@ object militar {
     method moverseHacia(direccion) {
     estado.moverHacia(direccion)
     }
-/*
-    method moverseHaciaIzquierda(){
-        estado.moverHaciaIzquierda()
-
-        if(puedeMoverse){
-		self.position(position.left(1))
-        }else{
-            game.say(self, "No puedo moverme")
-        } 
-	}*/
 	
 
     method arreglar(estaArreglando){
 
     }
 
-/*
-	method moverseHaciaDerecha(){
-		if(puedeMoverse){
-		self.position(position.right(1))
-        }else{
-            game.say(self, "No puedo moverme")
-        }
-	}
-
-    method moverseHaciaArriba(){
-		if(puedeMoverse){
-		self.position(position.up(1))
-        }else{
-            game.say(self, "No puedo moverme")
-        }
-	}
-
-    method moverseHaciaAbajo(){
-		if(puedeMoverse){
-		self.position(position.down(1))
-        }else{
-            game.say(self, "No puedo moverme")
-        }
-	}
-*/
-
-
-    //method image() = image
-
-    /*method image(nuevaImagen) {
-        image = nuevaImagen
-    }
-    */
-    
-
-
-    
     method llenarVida(){vida = 3}
     method cuantaVida() = vida
 
@@ -145,7 +98,7 @@ object militar {
     }
 
     method dimeVidaDeLaBase(){
-        game.say(self, "Vida Base: " + base.vida) 
+        game.say(self, "Vida Base: " + base.vida.tostring()) 
     }
 
     method restarVida(nuevaVida){
@@ -171,19 +124,24 @@ object militar {
 
     // Método para disparar proyectiles
     method disparar() {
-        const bala1 = new Proyectil()
+        var nombreBala = (1.randomUpTo(10000)).toString()
+        const bala1 = new Proyectil(nombre=nombreBala)
+		
+        bala1.aparecer()
+        
+        /*const bala1 = new Proyectil()
 		game.addVisual(bala1)
         bala1.moverse()
         //game.onCollideDo(bala1, { enemigo1 => bala1.enemigoColisionado(enemigo1)})
         game.onCollideDo(bala1, { colisionado => colisionado.chocarConBala(bala1)})
-        
+        */
         //al salir del borde se elimina la bala
-         if(bala1.position().x() == game.width()) { 
+        /* if(bala1.position().x() == game.width()) { 
 				game.removeVisual(bala1) 
 				game.removeTickEvent("moverProyectil") 
         }
-       
-    
+       */
+    }
 
 /*
     // Método para actualizar el tiempo jugado y sumar puntos por segundo
@@ -193,7 +151,7 @@ object militar {
         puntosVisual = "Puntos: " + puntos.toString() // Actualizar el texto visible de los puntos
     }
 */
-    }
+    
     method serAtacado(){
         if(inmune){
             game.say(self, "¡SOY INMUNE!")
@@ -290,10 +248,18 @@ class Proyectil {
 
     var property image = "Bala_Loca.png" 
     var property position = militar.position().right(1) // La bala proviene del militar
-
+    var nombre = "moverProyectil"+(1.randomUpTo(10000)).toString()
+    
     method moverse() {
-        game.onTick(50, "moverProyectil", { self.moverDerecha() })
+            game.onTick(50, nombre, { self.moverDerecha() })
     }  
+
+    method aparecer(){
+        game.addVisual(self)
+        self.moverse()
+        
+        game.onCollideDo(self, { colisionado => colisionado.chocarConBala(self)})
+    }
 
     /*method moverDerecha() {
         const nuevaX = position.x() + 1
@@ -310,15 +276,11 @@ class Proyectil {
             position = proximaPosicion
         } else {
             game.removeVisual(self) // Eliminar proyectil si sale del borde derecho
+            game.removeTickEvent(nombre)
         }
     }
     
 
-    /*method enemigoColisionado(enemigo1) {
-        game.removeVisual(self) // Eliminar proyectil
-        game.removeTickEvent("moverProyectil") // Detener el movimiento del proyectil
-        enemigo1.morir() // Destruir al enemigo
-    }*/
     method chocarConMilitar(){  } //le hacemos una colision vacia con el militar para que no haya errores 
 }
 /*
@@ -465,7 +427,7 @@ object interfaz {
 
     method desbloquearTeclas() {
         keyboard.e().onPressDo { militar.dimeLaVidaActual() }
-        keyboard.b().onPressDo { militar.dimeVidaDeLaBase() }
+        keyboard.v().onPressDo { militar.dimeVidaDeLaBase() }
         keyboard.f().onPressDo { militar.arreglarBase() }
         keyboard.space().onPressDo { self.detenerJuego() }
         keyboard.r().onPressDo { self.restart() }
