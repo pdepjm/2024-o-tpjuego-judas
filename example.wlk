@@ -396,7 +396,7 @@ object gameOver{
 	method quitar(){
 		game.removeVisual(self)
 	}
-	method image() = "gameOver.jpg"
+	method image() = "gameOver.png"
 	method colocar(){
 		game.addVisual(self)
 	}
