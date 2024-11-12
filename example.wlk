@@ -27,18 +27,6 @@ object normal{
      direccion.mover()
     }
 
-/*
-    method moverHaciaDerecha(){
-        militar.position(militar.posicionDerecha())
-    }
-
-     method moverHaciaArriba(){
-        militar.position(militar.posicionArriba())
-    }
-
-    method moverHaciaAbajo(){
-        militar.position(militar.posicionAbajo())
-    }*/
 
     method image(inmune) {
         if(inmune){
@@ -48,19 +36,30 @@ object normal{
             return "Soldado.png"
         }
     }
+
+    method disparo(){
+        var nombreBala = (1.randomUpTo(10000)).toString()
+        const bala1 = new Proyectil(nombre=nombreBala)
+		
+        bala1.aparecer()
+    }
 }
 
 object estaArreglando{
     method moverHacia(direcccion){
-        game.say(self, "No puedo moverme")
+        game.say(militar, "No puedo moverme")
     }
     method image(inmune) {
         if(inmune){
-            return "Soldado_Dorado.png"
+            return "Soldado_Dorado.png" //Cambiar img
         }
         else{
-            return "bob.png"
+            return "bob.png" 
         }
+    }
+
+    method disparo(){
+        game.say(militar, "No puedo disparar")
     }
 }
 
@@ -71,6 +70,7 @@ object militar {
     var property inmune = false
     var estado = normal
     
+    method dimeEstado() = estado
 
     method posicionIzquierda() = position.left(1)
     method posicionDerecha() = position.right(1)
@@ -124,10 +124,12 @@ object militar {
 
     // Método para disparar proyectiles
     method disparar() {
-        var nombreBala = (1.randomUpTo(10000)).toString()
-        const bala1 = new Proyectil(nombre=nombreBala)
+
+        estado.disparo()
+        //var nombreBala = (1.randomUpTo(10000)).toString()
+        //const bala1 = new Proyectil(nombre=nombreBala)
 		
-        bala1.aparecer()
+        //bala1.aparecer()
         
         /*const bala1 = new Proyectil()
 		game.addVisual(bala1)
