@@ -1,5 +1,6 @@
 import wollok.game.*
 
+
 object arriba{
     method mover(){
      militar.position(militar.posicionArriba())
@@ -63,6 +64,23 @@ object estaArreglando{
     }
 }
 
+object vidaMilitar{
+    var property position = game.at(1,0)
+    var property cantVida = militar.cuantaVida()
+    
+    method image(){
+        if (cantVida == 3){
+            return "3corazones.png"
+        }
+        else{return "bob.png"}
+    }
+    
+    method chocarConMilitar(){
+
+    }
+    
+}
+
 object militar {
     method image() = estado.image(inmune)
     var property position = game.at(0, game.height() / 2) // posicionar al militar en el borde izquierdo, centrado verticalmente
@@ -107,6 +125,7 @@ object militar {
         if(vida < 1){
             game.say(self, "¡Fin Del Juego!")
             interfaz.detenerJuego()
+            gameOver.estaActivado(true)
             // PONER FIN DEL JUEGO
         }
         else{
@@ -198,13 +217,17 @@ class Enemigo {
     var property position = game.at(0, 0) // Inicialmente en (0, 0), se ajustará a la hora de aparecer
     var nombre
     method generarEnemigo() {
-        const x = game.width() - 1 // Aparecer en el borde derecho
-        const y = 1.randomUpTo(game.height() - 2).truncate(0) // Posición aleatoria en el eje y
-        position = game.at(x, y)
+        if(not(gameOver.estado())){ //gameOver.estado().negate()
+            const x = game.width() - 1 // Aparecer en el borde derecho
+            const y = 1.randomUpTo(game.height() - 2).truncate(0) // Posición aleatoria en el eje y
+            position = game.at(x, y)
         
-        game.addVisual(self)
-        nombre="movimiento"+(1.randomUpTo(10000)).toString()
-        game.onTick(1000, nombre, { self.moverIzquierda() }) 
+            game.addVisual(self)
+            nombre="movimiento"+(1.randomUpTo(10000)).toString()
+            game.onTick(1000, nombre, { self.moverIzquierda() })
+        }
+         
+        
     }
 
     /*method movimiento(){
@@ -215,7 +238,9 @@ class Enemigo {
         const nuevaX = position.x() - 1 // Moverse hacia la izquierda
         if (nuevaX >= 0) { // Mientras no salga del borde izquierdo
             position = game.at(nuevaX, position.y())
-        } else {
+            if (gameOver.estado()){self.morir()}
+        } 
+        else {
             self.morir()// Eliminar al enemigo si llega al borde izquierdo
             base.restarVida(1)
         }
@@ -371,6 +396,7 @@ class SuperManzana inherits ManzanaDorada {
 object base {
     var property vida = 2
     var property image = "foto vida"
+
     //method image() = "image"
     /*var position = game.at(x, y)
     const x = game.width() - 1 // Aparecer en el borde derecho
@@ -381,10 +407,12 @@ object base {
             vida -= nuevaVida
             game.say(militar, "La base perdió una vida!")}
         else{
-            game.say(militar, "Perdí cayó la base")
             interfaz.detenerJuego()
+            vida=0 
+            gameOver.estaActivado(true)
+            game.say(militar, "Perdí cayó la base")
             // PONER FIN DEL JUEGO
-        }
+    }
     }  
 }
 
@@ -392,6 +420,10 @@ object base {
 //////////////////////   GAME OVER  ////////////////////////
 ////////////////////////////////////////////////////////////
 object gameOver{
+    var estado = false
+    method estado() = estado
+    method estaActivado(_estado) { estado = _estado}
+    //method estado1() = base.vida()==0 or militar.cuantaVida()==0
 	var property position = game.at(0,0)
 	method quitar(){
 		game.removeVisual(self)
@@ -406,7 +438,7 @@ object interfaz {
     method empezarJuego() {
         
         game.addVisual(militar)
-        
+        game.addVisual(vidaMilitar)
         self.desbloquearTeclas()
         self.colisiones()
         
@@ -453,7 +485,7 @@ object interfaz {
 
     method restart() {
         self.empezarJuego()
-
+        
         gameOver.quitar()
     }
     
