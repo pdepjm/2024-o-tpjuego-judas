@@ -39,12 +39,15 @@ Además, empleamos herencia en las manzanas para evitar repetir código. Creamos
     El jugador debe defenderla evitando que los enemigos se acerquen.
     La base se ubica a lo largo de todo el alto y bajo de la izquierda de la pantalla.
 # Reparación: 
-    Cuando la base está dañada, el jugador puede utilizar la tecla F para repararla,en donde el personaje no se podra mover ni disparar durante 4 segundos.
-    El efecto de inmunidad que brindan la Manzana Dorada y Manzana Super permite que el tiempo de inmovilidad se reduzca a 2 segundos.
+    Cuando la base está dañada, el jugador puede utilizar la tecla F para repararla,en donde el personaje
+    no se podra mover ni disparar durante 4 segundos.
+    El efecto de inmunidad que brindan la Manzana Dorada y Manzana Super permite que el tiempo de
+    inmovilidad se reduzca a 2 segundos.
     Estas condiciones pueden hacer que el personaje se encuentre expuesto a un ataque.
 
 # Aparición de Manzanas Especiales:
-    Cada cierto tiempo, aparecerán manzanas en el campo de juego. Estas manzanas tienen diferentes habilidades especiales que el jugador puede recoger para obtener ventajas.
+    Cada cierto tiempo, aparecerán manzanas en el campo de juego. Estas manzanas tienen diferentes
+    habilidades especiales que el jugador puede recoger para obtener ventajas.
 
 # Tipos de Manzanas:
 
