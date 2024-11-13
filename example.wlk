@@ -233,6 +233,7 @@ class Enemigo {
      method morir() {
         game.removeTickEvent(nombre)// Detener el movimiento del enemigo
         game.removeVisual(self)
+        contador.sumarPunto(1)
     }
 
 }
@@ -366,6 +367,7 @@ object gameOver{
 	method image() = "gameOver.png"
 	method colocar(){
 		game.addVisual(self)
+        estado = true
 	}
 }
 
@@ -376,14 +378,24 @@ object interfaz {
         game.addVisual(vidaMilitar)
         game.addVisual(base)
 
+		game.addVisual(contador)
+		game.addVisual(puntuacion)
+
         self.desbloquearTeclas()
         self.colisiones()
         
-        // Generar enemigos cada 4 segundos
-        game.onTick(2900, "aparece enemigo" + (1.randomUpTo(10000)).toString(), {
+        // Generar enemigos cada 2 segundos
+        game.onTick(2000, "aparece enemigo" + (1.randomUpTo(10000)).toString(), {
             const enemigo1 = new Enemigo(nombre="")
             enemigo1.generarEnemigo()
         }) 
+
+        /*   mas enemigos
+        game.onTick(2000, "aparece enemigo2" + (1.randomUpTo(10000)).toString(), {
+            const enemigo2 = new Enemigo(nombre="")
+            enemigo2.generarEnemigo()
+        }) 
+        */
 
         game.onTick(20000, "aparece manzana roja", {
             const manzanaRoja1 = new ManzanaRoja()
@@ -434,4 +446,41 @@ object interfaz {
 
         gameOver.colocar()
     }
+}
+
+object contador {
+	var contador = 0
+	method puntuacion() = contador
+	
+	method text() = contador.toString()
+	
+	method position() = puntuacion.position().right(1.5)
+	method sumarPunto(valor){
+		contador += valor
+	}
+	method reiniciar(){
+		contador = 0
+	}
+	method textColor() = paleta.blanco()
+
+    method chocarConMilitar(){}
+    method chocarConBala(){}
+}
+object puntuacion {
+	const puntuacion = "          Puntuación:"
+	var property position = game.at(1, 8).left(1)
+	method text() = puntuacion.toString()
+	method posicionInicial(){
+		position = game.at(1, 8).left(1)
+	} 
+	method posicionFinal(){
+		//position = game.at(1, 8).left(1)
+	}
+	method textColor() = paleta.blanco()
+
+    method chocarConMilitar(){}
+    method chocarConBala(){}
+}
+object paleta {
+	const property blanco = "FFFFFF"
 }
