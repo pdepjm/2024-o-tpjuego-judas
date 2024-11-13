@@ -52,10 +52,10 @@ object estaArreglando{
     }
     method image(inmune) {
         if(inmune){
-            return "Soldado_Dorado.png" //Cambiar img
+            return "constructorInmune.png" //Cambiar img
         }
         else{
-            return "bob.png" 
+            return "constructorNormal.png" 
         }
     }
 
@@ -66,18 +66,23 @@ object estaArreglando{
 
 object vidaMilitar{
     var property position = game.at(1,0)
-    var property cantVida = militar.cuantaVida()
+    //var property cantVida = militar.cuantaVida()
     
     method image(){
-        if (cantVida == 3){
+        if (militar.cuantaVida() == 3){
             return "3corazones.png"
         }
-        else{return "bob.png"}
+        else if(militar.cuantaVida() == 2){
+            return "2corazones.png"
+        } else {
+            return "1corazon.png"
+        }
     }
     
     method chocarConMilitar(){
 
     }
+    method chocarConBala(){}
     
 }
 
@@ -394,9 +399,18 @@ class SuperManzana inherits ManzanaDorada {
 }
 
 object base {
+    var property position = game.at(3,0)
     var property vida = 2
-    var property image = "foto vida"
+    method image(){
+        if (vida == 2){
+            return "base2vidas.png"
+        }else {
+            return "base1vida.png"
+        }
+    }
+    method chocarConMilitar(){
 
+    }
     //method image() = "image"
     /*var position = game.at(x, y)
     const x = game.width() - 1 // Aparecer en el borde derecho
@@ -439,6 +453,8 @@ object interfaz {
         
         game.addVisual(militar)
         game.addVisual(vidaMilitar)
+        game.addVisual(base)
+
         self.desbloquearTeclas()
         self.colisiones()
         
