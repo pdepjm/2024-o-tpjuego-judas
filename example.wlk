@@ -3,22 +3,35 @@ import wollok.game.*
 
 object arriba{
     method mover(){
-     militar.position(militar.posicionArriba())
+        var posicionNueva = militar.posicionArriba()
+        if(militar.estaDentroDelLimite(posicionNueva)){
+           militar.position(posicionNueva) 
+        }
+     
     }
 }
 object abajo{
     method mover(){
-     militar.position(militar.posicionAbajo())
+        var posicionNueva = militar.posicionAbajo()
+        if (militar.estaDentroDelLimite(posicionNueva)) {
+            militar.position(posicionNueva)
+        }
     }
 }
 object derecha{
     method mover(){
-     militar.position(militar.posicionDerecha())
+        var posicionNueva = militar.posicionDerecha()
+        if (militar.estaDentroDelLimite(posicionNueva)) {
+            militar.position(posicionNueva)
+        }
     }
 }
 object izquierda{
     method mover(){
-     militar.position(militar.posicionIzquierda())
+        var posicionNueva = militar.posicionIzquierda()
+        if (militar.estaDentroDelLimite(posicionNueva)) {
+            militar.position(posicionNueva)
+        }
     }
 }
 
@@ -88,7 +101,7 @@ object vidaMilitar{
 
 object militar {
     method image() = estado.image(inmune)
-    var property position = game.at(0, game.height() / 2) // posicionar al militar en el borde izquierdo, centrado verticalmente
+    var property position = game.at(0, game.height() - 1)
     var vida = 3
     var property inmune = false
     var estado = normal
@@ -107,6 +120,11 @@ object militar {
     estado.moverHacia(direccion)
     }
 	
+
+    method estaDentroDelLimite(unaPosicion) {
+    return unaPosicion.x() >= 0 && unaPosicion.x() <= game.width() - 1 &&
+           unaPosicion.y() >= 0 && unaPosicion.y() <= game.height() - 1
+    }
 
     method arreglar(estaArreglando){
 
