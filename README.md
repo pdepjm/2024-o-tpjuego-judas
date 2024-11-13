@@ -1,4 +1,4 @@
-#  (reemplazar nombre de juego acá) 
+#  INVASIÓN Z
 
 UTN - Facultad Regional Buenos Aires - Materia Paradigmas de Programación
 
@@ -27,29 +27,29 @@ Además, empleamos herencia en las manzanas para evitar repetir código. Creamos
 ![imagenJuego](assets/juegoScreen1.png)
 
 
-## Reglas de Juego / Instrucciones
+# Reglas de Juego / Instrucciones
 
-# Enemigos: 
+## Enemigos: 
 -   Los enemigos aparecen en el campo y tienen dos objetivos:
     Si tocan al personaje militar, le quitan puntos de vida.
     Si llegan a la base, también le quitan puntos de vida, debilitándola progresivamente.
 
-# Defensa de la Base: 
+## Defensa de la Base: 
     La base tiene un nivel de vida que se reduce cuando los enemigos logran tocarla. 
     El jugador debe defenderla evitando que los enemigos se acerquen.
     La base se ubica a lo largo de todo el alto y bajo de la izquierda de la pantalla.
-# Reparación: 
+## Reparación: 
     Cuando la base está dañada, el jugador puede utilizar la tecla F para repararla,en donde el personaje
     no se podra mover ni disparar durante 4 segundos.
     El efecto de inmunidad que brindan la Manzana Dorada y Manzana Super permite que el tiempo de
     inmovilidad se reduzca a 2 segundos.
     Estas condiciones pueden hacer que el personaje se encuentre expuesto a un ataque.
 
-# Aparición de Manzanas Especiales:
+## Aparición de Manzanas Especiales:
     Cada cierto tiempo, aparecerán manzanas en el campo de juego. Estas manzanas tienen diferentes
     habilidades especiales que el jugador puede recoger para obtener ventajas.
 
-# Tipos de Manzanas:
+## Tipos de Manzanas:
 
 - Manzana Roja: Suma una unidad de vida al personaje militar
 - Manzana Dorada: Otorga inmunidad al personaje contra los ataques de los enemigos (zombies) durante 4 segundos,durante este tiempo los zombies no pueden quitarle vida.
@@ -57,22 +57,22 @@ Además, empleamos herencia en las manzanas para evitar repetir código. Creamos
 
 Este es un juego donde eres un jugador que debe disparar balas con su arma para eliminar a los enemigos que aparezcan. Tu objetivo es detener a los enemigos antes de que lleguen a tu base o te eliminen a ti. Los enemigos se mueven hacia la base, y tú debes ser rápido y preciso al disparar para evitar que logren llegar. El juego termina si los enemigos llegan a la base o te derrotan.
 
-## Controles:
+# Controles:
 
-# Movimientos :
+## Movimientos :
 
 - `W` para mover al militar hacia arriba.
 - `A` para mover al militar hacia la izquierda.
 - `S` para mover al militar hacia abajo.
 - `D` para mover al militar hacia la derecha.
 
-# Acciones Especiales :
+## Acciones Especiales :
 
 - `F` para reparar la base.
 - `P` para que el militar dispare.
 
 
-## Diagrama de clases:
+# Diagrama de clases:
 ![image](https://github.com/user-attachments/assets/b7a554a5-940e-4e9d-9cfc-b18d4c810c61)
 
 
