@@ -304,15 +304,11 @@ class ManzanaRoja inherits Manzana{
 
 class ManzanaDorada inherits Manzana{
     
-    var property inmunidadActivada = false
-    
     method image() = "Manzana_Dorada.png" 
 
     override method habilidad() {
-        militar.activarInmunidad()
-        
+        militar.activarInmunidad() 
     }
-    
 }
 
 class SuperManzana inherits ManzanaDorada {
@@ -415,8 +411,6 @@ object interfaz {
 
     method desbloquearTeclas() {
         keyboard.f().onPressDo { militar.arreglarBase() }
-        keyboard.space().onPressDo { self.detenerJuego() }
-        
         keyboard.p().onPressDo { militar.disparar() }
 
         //flechas de movimiento
