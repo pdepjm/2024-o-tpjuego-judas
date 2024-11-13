@@ -73,7 +73,7 @@ Este es un juego donde eres un jugador que debe disparar balas con su arma para 
 
 
 # Diagrama de clases:
-![image](https://github.com/user-attachments/assets/b7a554a5-940e-4e9d-9cfc-b18d4c810c61)
+![image](assets/diagramaClases.png)
 
 
 
