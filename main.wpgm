@@ -10,35 +10,6 @@ program defenderBase {
     game.title("Defender la Base")
 
     interfaz.empezarJuego()
-/*
-    // Actualizar el tiempo jugado y los puntos cada segundo
-    game.onTick(1000, "actualizar tiempo y puntos", {
-        militar.actualizarTiempoYPuntos()
-        game.say(militar, militar.puntosVisual) // Mostrar puntos y tiempo en pantalla
-    })
-*/
-    // Evento para disparar con la tecla "p"
-
-    /*
-    if(militar.frenado()) 
-    {//Frenan disparo : 
-    game.vel
-    keyboard.p().onPressDo { militar.disparar() }
-
-    //Desactivar Movimiento  : 
-
-    keyboard.a().onPressDo { militar.caminarArriba() }
-    keyboard.s().onPressDo { militar.caminarIzquierda() }
-    keyboard.d().onPressDo { militar.caminarDerecha() }
-    keyboard.w().onPressDo { militar.caminarAbajo() }
-    }
-    */
-
-    //game.onCollideDo(bala1, { colisionado => colisionado.chocarConBala()})
-
-    // TECLAS
-
-
 
     game.start()
 }

@@ -1,20 +1,21 @@
 import example.*
+describe "tests del juego" {
+    test "vida del militar inicial en 3" {
+        assert.equals(3, militar.cuantaVida())
+    }
 
-test "vida del militar inicial en 3" {
-    assert.equals(3, militar.cuantaVida())
+    test "La vida es 2 cuando el militar choca un enemigo" {
+        const enemigo1 = new Enemigo(nombre=1)
+        enemigo1.chocarConMilitar() 
+        assert.equals(2, militar.cuantaVida())
+    }
+
+    test "Manzana dorada hace inmune a militar" {
+        const manzanaDorada1 = new ManzanaDorada()
+        manzanaDorada1.chocarConMilitar()
+        const enemigo1 = new Enemigo(nombre=1)
+        enemigo1.chocarConMilitar() 
+        assert.that(militar.inmune())
+    }
 }
 
-test "La vida es 4 cuando el militar toca una manzana roja" {
-    const manzanaRoja1 = new ManzanaRoja()
-    manzanaRoja1.teComioMilitar() 
-    assert.equals(4, militar.cuantaVida())
-    
-}
-
-test "Manzana dorada hace inmune a militar" {
-    const manzanaDorada1 = new ManzanaDorada()
-    manzanaDorada1.teComioMilitar()
-    const enemigo1 = new Enemigo()
-    enemigo1.teTocoEnemigo() 
-    assert.that(manzanaDorada1.inmunidadActivada())
-}
