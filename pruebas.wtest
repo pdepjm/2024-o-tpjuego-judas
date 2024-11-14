@@ -1,9 +1,21 @@
-import pepita.*
+import example.*
+describe "tests del juego" {
+    test "vida del militar inicial en 3" {
+        assert.equals(3, militar.cuantaVida())
+    }
 
-describe "group of tests for pepita" {
+    test "La vida es 2 cuando el militar choca un enemigo" {
+        const enemigo1 = new Enemigo(nombre=1)
+        enemigo1.chocarConMilitar() 
+        assert.equals(2, militar.cuantaVida())
+    }
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
-  }
-
+    test "Manzana dorada hace inmune a militar" {
+        const manzanaDorada1 = new ManzanaDorada()
+        manzanaDorada1.chocarConMilitar()
+        const enemigo1 = new Enemigo(nombre=1)
+        enemigo1.chocarConMilitar() 
+        assert.that(militar.inmune())
+    }
 }
+
