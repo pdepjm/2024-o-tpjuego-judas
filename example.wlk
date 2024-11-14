@@ -61,9 +61,7 @@ object normal{
 }
 
 object estaArreglando{
-    method moverHacia(direcccion){
-        game.say(militar, "No puedo moverme")
-    }
+    method moverHacia(direcccion){}
     method image(inmune) {
         if(inmune){
             return "constructorInmune.png"
@@ -73,9 +71,7 @@ object estaArreglando{
         }
     }
 
-    method disparo(){
-        game.say(militar, "No puedo disparar")
-    }
+    method disparo(){}
 }
 
 object vidaMilitar{
@@ -92,9 +88,7 @@ object vidaMilitar{
         }
     }
     
-    method chocarConMilitar(){
-
-    }
+    method chocarConMilitar(){}
     method chocarConBala(){}
     
 }
@@ -138,13 +132,10 @@ object militar {
         vida -= nuevaVida
 
         if(vida < 1){
-            game.say(self, "¡Fin Del Juego!")
             interfaz.detenerJuego()
             gameOver.estaActivado(true)
         }
-        else{
-            game.say(self, "¡Perdi una vida!")
-        }
+        else{}
     }  
     
     method sumarVida(nuevaVida){
@@ -158,9 +149,7 @@ object militar {
     }
     
     method serAtacado(){
-        if(inmune){
-            game.say(self, "¡SOY INMUNE!")
-        }
+        if(inmune){}
         else {
             self.restarVida(1)
         }
@@ -178,7 +167,6 @@ object militar {
     method chocarConBala(bala1){ }
     
     method arreglarBase(){
-        game.say(self, "Arreglando la base")
         estado=estaArreglando
         if(inmune){
             game.onTick(2000, "No Moverse",{ estado = normal })  
@@ -245,7 +233,7 @@ class Proyectil {
     var nombre = "moverProyectil"+(1.randomUpTo(10000)).toString()
     
     method moverse() {
-            game.onTick(35, nombre, { self.moverDerecha() })
+            game.onTick(40, nombre, { self.moverDerecha() })
     }  
 
     method aparecer(){
@@ -255,6 +243,7 @@ class Proyectil {
         game.onCollideDo(self, { colisionado => colisionado.chocarConBala(self)})
     }
 
+    method chocarConBala(proyectil){}
     method moverDerecha() {
         const proximaPosicion = position.right(1)
         if (proximaPosicion.x() < game.width()) {
@@ -331,20 +320,18 @@ object base {
             return "base1vida.png"
         }
     }
-    method chocarConMilitar(){
+    method chocarConMilitar(){}
+    method chocarConBala(bala1){}
 
-    }
-   
     method restarVida(nuevaVida){
         if(vida>1){
             vida -= nuevaVida
-            game.say(militar, "La base perdió una vida!")}
+        }
         else{
             interfaz.detenerJuego()
             vida=0 
             gameOver.estaActivado(true)
-            game.say(militar, "Perdí cayó la base")
-    }
+        }
     }  
 }
 
@@ -458,7 +445,7 @@ object contador {
 	method textColor() = paleta.blanco()
 
     method chocarConMilitar(){}
-    method chocarConBala(){}
+    method chocarConBala(bala1){}
 }
 object puntuacion {
 	const puntuacion = "          Puntuación:"
